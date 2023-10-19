@@ -47,6 +47,14 @@ namespace UserInterfaceEFK.View
                 }
             }
 
+            /*if (!isActive)
+            {
+                if (ImGui.Button(T.GetString("Стоп")))
+                {
+                    isActive = !isActive;
+                }
+            }*/
+
             if (ImGui.BeginTabBar("Tabs", ImGuiTabBarFlags.AutoSelectNewTabs))
             {
                 if (ImGui.BeginTabItem(T.GetString("ЕСП")))

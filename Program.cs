@@ -34,7 +34,7 @@ namespace MiraEFK
         {
             try
             {
-                Config = LoadData();
+                Config = new Settings();
                 Config.Lang = selectedLang;
                 T.CurrentLang = Config.Lang;
                 var overlay = new EFKOverlay();

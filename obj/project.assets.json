@@ -771,23 +771,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\xisma\\.nuget\\packages\\": {},
+    "C:\\Users\\Woody\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\xisma\\Documents\\Repositories\\TestImgui\\UserInterfaceEFK.csproj",
+      "projectUniqueName": "C:\\Users\\Woody\\Documents\\TestImgui\\UserInterfaceEFK.csproj",
       "projectName": "UserInterfaceEFK",
-      "projectPath": "C:\\Users\\xisma\\Documents\\Repositories\\TestImgui\\UserInterfaceEFK.csproj",
-      "packagesPath": "C:\\Users\\xisma\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\xisma\\Documents\\Repositories\\TestImgui\\obj\\",
+      "projectPath": "C:\\Users\\Woody\\Documents\\TestImgui\\UserInterfaceEFK.csproj",
+      "packagesPath": "C:\\Users\\Woody\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Woody\\Documents\\TestImgui\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\xisma\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Woody\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -796,6 +796,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

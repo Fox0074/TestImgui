@@ -27,7 +27,7 @@ namespace View
             Program.Style.InitStyle();
 
             SettingsView.Initialize();
-            ReplaceFont(Program.FolderPath + "\\fixedsys.ttf", 15, FontGlyphRangeType.Cyrillic);
+            ReplaceFont("fixedsys.ttf", 15, FontGlyphRangeType.Cyrillic);
             LootEspOverlay.LootFilterText = string.Join("\n", Program.Config.LootFilter.ToArray());
             LootEspOverlay.RareFilterText = string.Join("\n", Program.Config.RareLootFilter.ToArray());
 
