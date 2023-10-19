@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PlatformTarget>x64</PlatformTarget>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <UseWindowsForms>False</UseWindowsForms>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <FileVersion>4.1.0.0</FileVersion>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <EnableNETAnalyzers>False</EnableNETAnalyzers>
+    <AnalysisLevel>none</AnalysisLevel>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AssemblyName>$(Key)</AssemblyName>
+	</PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Deterministic>False</Deterministic>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Deterministic>False</Deterministic>
+    <PublishSingleFile>True</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
+    <SelfContained>False</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="mira-common\**" />
+		<EmbeddedResource Remove="mira-common\**" />
+		<None Remove="mira-common\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ArmDot.Client" Version="2023.10.0" />
+		<PackageReference Include="ArmDot.Engine.MSBuildTasks" Version="2023.10.0" />
+		<PackageReference Include="ImGui.NET" Version="1.89.7.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
+		<PackageReference Include="Vortice.D3DCompiler" Version="3.2.0" />
+		<PackageReference Include="Vortice.Direct3D11" Version="3.2.0" />
+	</ItemGroup>
+
+  <Target Name="Protect" AfterTargets="AfterCompile" BeforeTargets="BeforePublish" Condition="'$(Configuration)'=='Release'">
+    <ItemGroup>
+      <Assemblies Include="$(ProjectDir)$(IntermediateOutputPath)$(TargetFileName)" />
+    </ItemGroup>
+    <ArmDot.Engine.MSBuildTasks.ObfuscateTask Inputs="@(Assemblies)" ReferencePaths="@(_ResolveAssemblyReferenceResolvedFiles->'%(RootDir)%(Directory)')" SkipAlreadyObfuscatedAssemblies="true" />
+  </Target>
+
+</Project>

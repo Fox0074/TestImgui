@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserInterfaceEFK", "UserInterfaceEFK.csproj", "{A382780B-7990-4FEF-B1F1-7B91239BEE49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A382780B-7990-4FEF-B1F1-7B91239BEE49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A382780B-7990-4FEF-B1F1-7B91239BEE49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A382780B-7990-4FEF-B1F1-7B91239BEE49}.Debug|x64.ActiveCfg = Debug|x64
+		{A382780B-7990-4FEF-B1F1-7B91239BEE49}.Debug|x64.Build.0 = Debug|x64
+		{A382780B-7990-4FEF-B1F1-7B91239BEE49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A382780B-7990-4FEF-B1F1-7B91239BEE49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A382780B-7990-4FEF-B1F1-7B91239BEE49}.Release|x64.ActiveCfg = Release|x64
+		{A382780B-7990-4FEF-B1F1-7B91239BEE49}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8C4B4E4-091C-4321-9303-30CF186F54A9}
+	EndGlobalSection
+EndGlobal

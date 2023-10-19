@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <NoWin32Manifest>true</NoWin32Manifest>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	<Version>7.1.0</Version>
+	<StartupObject></StartupObject>
+	  <AssemblyName>$(LibKey)</AssemblyName>
+	  <RootNamespace>$(LibKey)</RootNamespace>
+	  <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+	  <PackageId>$(LibKey)</PackageId>
+	  <Authors>$(LibKey)</Authors>
+	  <Company>$(LibKey)</Company>
+	  <Product>$(LibKey)</Product>
+	  <Description>$(LibKey)</Description>
+    <PublishAot>true</PublishAot>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ImGui.NET" Version="1.89.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
+    <PackageReference Include="Vortice.D3DCompiler" Version="2.3.0" />
+    <PackageReference Include="Vortice.Direct3D11" Version="2.3.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,9 @@
+is_global = true
+build_property.RootNamespace = UserInterfaceEFK
+build_property.ProjectDir = C:\Users\xisma\Documents\Repositories\MiraEFK\
+build_property.PolySharpUsePublicAccessibilityForGeneratedTypes = 
+build_property.PolySharpIncludeRuntimeSupportedAttributes = 
+build_property.PolySharpUseInteropServices2NamespaceForUnmanagedCallersOnlyAttribute = 
+build_property.PolySharpExcludeGeneratedTypes = 
+build_property.PolySharpIncludeGeneratedTypes = 
+build_property.PolySharpExcludeTypeForwardedToDeclarations = 
