@@ -28,6 +28,7 @@ namespace MiraEFK
         {
             var selectedLang = Language.Ru;
             var x = ShowOverlay(selectedLang).Result;
+
         }
 
         private static async Task<bool> ShowOverlay(Language selectedLang)

@@ -33,30 +33,133 @@ namespace View
 
             return Task.CompletedTask;
         }
-
+        
         protected override void Render()
         {
-            try
+            
+            ImGui.Begin(T.GetString("Slave"),
+                ImGuiWindowFlags.AlwaysAutoResize |
+                ImGuiWindowFlags.NoBringToFrontOnFocus |
+                ImGuiWindowFlags.NoCollapse);
+
+            if (ImGui.BeginTabBar("Tabs", ImGuiTabBarFlags.AutoSelectNewTabs))
             {
-                Width = window.Dimensions.Width;
-                Height = window.Dimensions.Height;
+                if (ImGui.BeginTabItem(T.GetString("ЕСП")))
+                {
+                    if (Program.Config.UseExperimentalVersion)
+                    {
+                        if (ImGui.Button(T.GetString("Показывать отладку")))
+                        {
+                            Program.Config.ShowDebug = !Program.Config.ShowDebug;
+                            Program.SaveData();
+                        }
+                    }
 
-                if (!isRunning)
-                    Close();
+                    ImGui.SliderFloat(T.GetString("Дистанция отрисовки "), ref Program.Config.DrawDistance, 1, 2000, "%.0f");
+                    if (ImGui.Checkbox(T.GetString("Скелет"), ref Program.Config.DrawBones))
+                        Program.SaveData();
+                    if (ImGui.Checkbox(T.GetString("Рамка"), ref Program.Config.DrawBoxes))
+                        Program.SaveData();
+                    if (ImGui.Checkbox(T.GetString("Ник"), ref Program.Config.DrawNick))
+                        Program.SaveData();
+                    if (ImGui.SliderFloat(T.GetString("Масштаб радара"), ref Program.Config.RadarMashtab, 0f, 10f, "%.1f"))
+                        Program.SaveData();
+                    if (ImGui.Checkbox(T.GetString("Жизни (HP)"), ref Program.Config.DrawHealth))
+                        Program.SaveData();
+                    if (ImGui.Checkbox(T.GetString("ID Команды"), ref Program.Config.ShowTemmates))
+                        Program.SaveData();
+                    if (ImGui.Checkbox(T.GetString("Оружие в руках"), ref Program.Config.ShowWeapon))
+                        Program.SaveData();
+                    if (ImGui.Checkbox(T.GetString("Выходы"), ref Program.Config.DrawExits))
+                        Program.SaveData();
 
-                CheckInput();
+                    if (ImGui.Checkbox(T.GetString("Тень под текстом"), ref Program.Config.DrawShadows))
+                        Program.SaveData();
 
-                if (Program.Config.ShowDebug)
-                    DebugView.Render();
+                    ImGui.EndTabItem();
+                }
 
-                if (_showSettings)
-                    SettingsView.Render(ref _isActive);
+                if (ImGui.BeginTabItem(T.GetString("Разное")))
+                {
+                    if (ImGui.Checkbox(T.GetString("Антиотдача"), ref Program.Config.NoRecoil))
+                        Program.SaveData();
+                    //if (ImGui.Checkbox(T.GetString("Бесконечная выносливость"), ref Program.Config.Stamina))
+                    //    Program.SaveData();
+                    if (ImGui.Checkbox(T.GetString("Точка по центру экрана"), ref Program.Config.AimActive))
+                        Program.SaveData();
+                    if (ImGui.Checkbox(T.GetString("Радар"), ref Program.Config.DrawRadar))
+                        Program.SaveData();
+                    if (ImGui.SliderFloat(T.GetString("Позиция радара X"), ref Program.Config.RadarOffset.X, 0, -(EFKOverlay.Width - 100), "%1f"))
+                        Program.SaveData();
+                    if (ImGui.SliderFloat(T.GetString("Позиция радара Y"), ref Program.Config.RadarOffset.Y, 0, EFKOverlay.Height - 100, "%1f"))
+                        Program.SaveData();
+                   
+
+                    if (ImGui.Checkbox(T.GetString("Режим отладки"), ref Program.Config.ShowDebug))
+                        Program.SaveData();
+                    ImGui.EndTabItem();
+                }
+
+                if (ImGui.BeginTabItem(T.GetString("Лут")))
+                {
+                    LootEspOverlay.Render();
+
+                    ImGui.EndTabItem();
+                }
+
+                if (ImGui.BeginTabItem(T.GetString("Аим")))
+                {
+
+                    if (ImGui.Checkbox(T.GetString("Аимбот"), ref Program.Config.AimBot))
+                        Program.SaveData();
+
+                 
+
+                    if (Program.Config.AimTarget == AimTarget.Custom)
+                    {
+                        if (ImGui.DragFloat3(T.GetString("Свое смещение прицела"), ref Program.Config.AimCustomOffset, .1f))
+                            Program.SaveData();
+                    }
+
+
+                    if (ImGui.SliderFloat(T.GetString("Радиус захвата (Aim FOV)"), ref Program.Config.AimFov, 5f, 500f, "%.1f"))
+                        Program.SaveData();
+
+                    ImGui.EndTabItem();
+                }
+
+                if (ImGui.BeginTabItem(T.GetString("Цвета")))
+                {
+                    if (ImGui.ColorEdit4(T.GetString("Usec"), ref Program.Config.UsecColor))
+                        Program.SaveData();
+                    if (ImGui.ColorEdit4(T.GetString("Bear"), ref Program.Config.BearColor))
+                        Program.SaveData();
+                    if (ImGui.ColorEdit4(T.GetString("Дикий"), ref Program.Config.BotPlayersColor))
+                        Program.SaveData();
+                    if (ImGui.ColorEdit4(T.GetString("Лут"), ref Program.Config.LootColor))
+                        Program.SaveData();
+                    if (ImGui.ColorEdit4(T.GetString("Редкий лут"), ref Program.Config.RareLootColor))
+                        Program.SaveData();
+                    if (ImGui.ColorEdit4(T.GetString("Трупы"), ref Program.Config.CorpseColor))
+                        Program.SaveData();
+                    if (ImGui.ColorEdit4(T.GetString("Контейнеры"), ref Program.Config.ContainerColor))
+                        Program.SaveData();
+                    if (ImGui.ColorEdit4(T.GetString("Бот"), ref Program.Config.BotColor))
+                        Program.SaveData();
+                    if (ImGui.ColorEdit4(T.GetString("Босы"), ref Program.Config.BossColor))
+                        Program.SaveData();
+                    if (ImGui.ColorEdit4(T.GetString("Свита"), ref Program.Config.SvitaColor))
+                        Program.SaveData();
+                    if (ImGui.ColorEdit4(T.GetString("Выходы"), ref Program.Config.ExitColor))
+                        Program.SaveData();
+                    if (ImGui.ColorEdit4(T.GetString("Другое"), ref Program.Config.DefaultColor))
+                        Program.SaveData();
+
+                    ImGui.EndTabItem();
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("DrawLoop error");
-                _isActive = false;
-            }
+
+            ImGui.End();
         }
 
 
