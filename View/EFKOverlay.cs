@@ -11,8 +11,8 @@ namespace View
 {
     internal class EFKOverlay : Overlay
     {
-        internal static int Width = 1920;
-        internal static int Height = 1080;
+        internal static int Width = 520;
+        internal static int Height = 410;
 
         private long _unityModule = 0;
         private bool _isActive = false;
@@ -36,9 +36,9 @@ namespace View
         
         protected override void Render()
         {
-            
+            ImGui.SetNextWindowSize(new Vector2(Width, Height));
             ImGui.Begin(T.GetString("Slave"),
-                ImGuiWindowFlags.AlwaysAutoResize |
+                //ImGuiWindowFlags.AlwaysAutoResize |
                 ImGuiWindowFlags.NoBringToFrontOnFocus |
                 ImGuiWindowFlags.NoCollapse);
 
@@ -128,7 +128,7 @@ namespace View
                     ImGui.EndTabItem();
                 }
 
-                if (ImGui.BeginTabItem(T.GetString("Цвета")))
+                /*if (ImGui.BeginTabItem(T.GetString("Цвета")))
                 {
                     if (ImGui.ColorEdit4(T.GetString("Usec"), ref Program.Config.UsecColor))
                         Program.SaveData();
@@ -156,7 +156,7 @@ namespace View
                         Program.SaveData();
 
                     ImGui.EndTabItem();
-                }
+                }*/
             }
 
             ImGui.End();
