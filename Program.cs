@@ -1,6 +1,8 @@
 ﻿using ClickableTransparentOverlay;
 using ClickableTransparentOverlay.Styles;
+using ClickableTransparentOverlay.Win32;
 using DriverUserInterface.Structures;
+using ImGuiNET;
 using Newtonsoft.Json;
 using System.Numerics;
 using System.Text;
@@ -19,6 +21,7 @@ namespace MiraEFK
         internal static bool IsValid;
         internal static Settings Config;
         internal static BaseStyle Style = new OrangeStyle();
+        private static bool btn1_clk;
 
         internal static string FolderPath { get; } = 
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +

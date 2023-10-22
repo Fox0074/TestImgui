@@ -62,9 +62,9 @@
 
         /// <summary>
         /// Allows the window to become transparent.
-        /// </summary>
         /// <param name="handle">
         /// Window native pointer.
+        /// </summary>
         /// </param>
         internal static void InitTransparency(IntPtr handle)
         {
@@ -88,7 +88,7 @@
                 if (WantClickable)
                 {
                     User32.SetWindowLong(handle, (int)WindowLongParam.GWL_EXSTYLE, (uint)Clickable);
-                    User32.SetFocus(handle);
+                    //User32.SetFocus(handle);
                 }
                 else
                 {

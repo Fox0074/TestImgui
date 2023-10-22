@@ -1,8 +1,0 @@
-# Applications
-*.app
-*.exe
-*.war
-**/bin
-**/obj
-**/.vs
-**/packages
