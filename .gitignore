@@ -9,6 +9,9 @@ dist/
 Temp/
 Release/
 Debug/
+/.vs/
+/obj/
+/bin/
 .vs/
 obj/
 bin/
