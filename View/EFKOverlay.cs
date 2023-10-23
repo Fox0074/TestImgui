@@ -21,9 +21,15 @@ namespace View
         private bool _showSettings = true;
         private bool _isModuleInit = false;
         private string _bgName = T.RandomString(8);
-        bool btn1_clk = true;
-        bool btn2_clk = false;
-        bool btn3_clk = false;
+        private bool _btn1Clk = true;
+        private bool _btn2Clk = false;
+        private bool _btn3Clk = false;
+        private int _TablesCount = 3;
+        private int _splitLineStartXPos = 110;
+        private int _splitLineWeight = 30;
+        private int _tableButtonWeight = 100;
+        private int _tableButtonHeight = 50;
+        private int _subtableFieldWeight = 500;
 
         protected override Task PostInitialized()
         {
@@ -37,6 +43,71 @@ namespace View
             return Task.CompletedTask;
         }
 
+        protected void SwitchButton(int ButtonNum)
+        {
+            switch (ButtonNum)
+            {
+                case 1:
+                    _btn1Clk = true;
+                    _btn2Clk = false;
+                    _btn3Clk = false;
+                    break;
+                case 2:
+                    _btn1Clk = false;
+                    _btn2Clk = true;
+                    _btn3Clk = false;
+                    break;
+                case 3:
+                    _btn1Clk = false;
+                    _btn2Clk = false;
+                    _btn3Clk = true;
+                    break;
+            }
+        }
+        protected void RenderSubTables(int ButtonNum)
+        {
+            ImGui.BeginTabBar(String.Format("Tabs{0}", ButtonNum), ImGuiTabBarFlags.AutoSelectNewTabs);
+
+            if (ImGui.BeginTabItem(T.GetString(String.Format("Subtable {0}.1", ButtonNum))))
+            {
+                ImGui.SliderFloat(T.GetString("Дистанция отрисовки "), ref Program.Config.DrawDistance, 1, 2000, "%.0f");
+                ImGui.Checkbox(T.GetString("Скелет"), ref Program.Config.DrawBones);
+                ImGui.Checkbox(T.GetString("Рамка"), ref Program.Config.DrawBoxes);
+                ImGui.Checkbox(T.GetString("Ник"), ref Program.Config.DrawNick);
+                ImGui.SliderFloat(T.GetString("Масштаб радара"), ref Program.Config.RadarMashtab, 0f, 10f, "%.1f");
+                ImGui.Checkbox(T.GetString("Жизни (HP)"), ref Program.Config.DrawHealth);
+                ImGui.Checkbox(T.GetString("ID Команды"), ref Program.Config.ShowTemmates);
+                ImGui.Checkbox(T.GetString("Оружие в руках"), ref Program.Config.ShowWeapon);
+                ImGui.Checkbox(T.GetString("Выходы"), ref Program.Config.DrawExits);
+
+                ImGui.EndTabItem();
+            }
+
+            if (ImGui.BeginTabItem(T.GetString(String.Format("Subtable {0}.2", ButtonNum))))
+            {
+                ImGui.Checkbox(T.GetString("Антиотдача"), ref Program.Config.NoRecoil);
+                ImGui.Checkbox(T.GetString("Точка по центру экрана"), ref Program.Config.AimActive);
+                ImGui.Checkbox(T.GetString("Радар"), ref Program.Config.DrawRadar);
+                ImGui.SliderFloat(T.GetString("Позиция радара X"), ref Program.Config.RadarOffset.X, 0, -(EFKOverlay.Width - 100), "%1f");
+                ImGui.SliderFloat(T.GetString("Позиция радара Y"), ref Program.Config.RadarOffset.Y, 0, EFKOverlay.Height - 100, "%1f");
+
+                ImGui.Checkbox(T.GetString("Режим отладки"), ref Program.Config.ShowDebug);
+                ImGui.EndTabItem();
+            }
+
+            if (ImGui.BeginTabItem(T.GetString(String.Format("Subtable {0}.3", ButtonNum))))
+            {
+                ImGui.Checkbox(T.GetString("Аимбот"), ref Program.Config.AimBot);
+
+                if (Program.Config.AimTarget == AimTarget.Custom)
+                    ImGui.DragFloat3(T.GetString("Свое смещение прицела"), ref Program.Config.AimCustomOffset, .1f);
+
+                ImGui.SliderFloat(T.GetString("Радиус захвата"), ref Program.Config.AimFov, 5f, 500f, "%.1f");
+
+                ImGui.EndTabItem();
+            }
+        }
+
         protected override void Render()
         {
 
@@ -46,160 +117,26 @@ namespace View
             ImGuiWindowFlags.NoCollapse |
             ImGuiWindowFlags.NoScrollbar |
             ImGuiWindowFlags.NoScrollWithMouse);
-            ImGui.BeginChild("Vertical Bar with buttons", new Vector2(100, Height * 0.865f), false);
+            ImGui.BeginChild("Vertical Bar with buttons", new Vector2(_tableButtonWeight, Height * 0.865f), false);
 
-
-            if (ImGui.Button("Table 1", new Vector2(100, 50)))
-            {
-                btn1_clk = true;
-                btn2_clk = false;
-                btn3_clk = false;
-            }
-            if (ImGui.Button("Table 2", new Vector2(100, 50)))
-            {
-                btn2_clk = true;
-                btn1_clk = false;
-                btn3_clk = false;
-            }
-            if (ImGui.Button("Table 3", new Vector2(100, 50)))
-            {
-                btn3_clk = true;
-                btn1_clk = false;
-                btn2_clk = false;
-            }
+            for (int i = 1; i <= _TablesCount; i++)
+                if (ImGui.Button(String.Format("Table {0}", i), new Vector2(_tableButtonWeight, _tableButtonHeight)))
+                    SwitchButton(i);
+            
             ImGui.EndChild();
 
-            ImGui.SameLine(110, 30);
+            ImGui.SameLine(_splitLineStartXPos, _splitLineWeight);
 
-            ImGui.BeginChild("Subtables", new Vector2(500, Height * 0.865f), false);
-            if (btn1_clk)
-            {
-                ImGui.BeginTabBar("Tabs1", ImGuiTabBarFlags.AutoSelectNewTabs);
+            ImGui.BeginChild("Subtables", new Vector2(_subtableFieldWeight, Height * 0.865f), false);
+            if (_btn1Clk)
+                RenderSubTables(1);
+                
+            if (_btn2Clk)
+                RenderSubTables(2);
 
-                if (ImGui.BeginTabItem(T.GetString("Subtable 1.1")))
-                {
-                    ImGui.SliderFloat(T.GetString("Дистанция отрисовки "), ref Program.Config.DrawDistance, 1, 2000, "%.0f");
-                    ImGui.Checkbox(T.GetString("Скелет"), ref Program.Config.DrawBones);
-                    ImGui.Checkbox(T.GetString("Рамка"), ref Program.Config.DrawBoxes);
-                    ImGui.Checkbox(T.GetString("Ник"), ref Program.Config.DrawNick);
-                    ImGui.SliderFloat(T.GetString("Масштаб радара"), ref Program.Config.RadarMashtab, 0f, 10f, "%.1f");
-                    ImGui.Checkbox(T.GetString("Жизни (HP)"), ref Program.Config.DrawHealth);
-                    ImGui.Checkbox(T.GetString("ID Команды"), ref Program.Config.ShowTemmates);
-                    ImGui.Checkbox(T.GetString("Оружие в руках"), ref Program.Config.ShowWeapon);
-                    ImGui.Checkbox(T.GetString("Выходы"), ref Program.Config.DrawExits);
+            if (_btn3Clk)
+                RenderSubTables(3);
 
-                    ImGui.EndTabItem();
-                }
-
-                if (ImGui.BeginTabItem(T.GetString("Subtable 1.2")))
-                {
-                    ImGui.Checkbox(T.GetString("Антиотдача"), ref Program.Config.NoRecoil);
-                    ImGui.Checkbox(T.GetString("Точка по центру экрана"), ref Program.Config.AimActive);
-                    ImGui.Checkbox(T.GetString("Радар"), ref Program.Config.DrawRadar);
-                    ImGui.SliderFloat(T.GetString("Позиция радара X"), ref Program.Config.RadarOffset.X, 0, -(EFKOverlay.Width - 100), "%1f");
-                    ImGui.SliderFloat(T.GetString("Позиция радара Y"), ref Program.Config.RadarOffset.Y, 0, EFKOverlay.Height - 100, "%1f");
-
-                    ImGui.Checkbox(T.GetString("Режим отладки"), ref Program.Config.ShowDebug);
-                    ImGui.EndTabItem();
-                }
-
-                if (ImGui.BeginTabItem(T.GetString("Subtable 1.3")))
-                {
-                    ImGui.Checkbox(T.GetString("Аимбот"), ref Program.Config.AimBot);
-
-                    if (Program.Config.AimTarget == AimTarget.Custom)
-                        ImGui.DragFloat3(T.GetString("Свое смещение прицела"), ref Program.Config.AimCustomOffset, .1f);
-
-                    ImGui.SliderFloat(T.GetString("Радиус захвата"), ref Program.Config.AimFov, 5f, 500f, "%.1f");
-
-                    ImGui.EndTabItem();
-                }
-            }
-            if (btn2_clk)
-            {
-                ImGui.BeginTabBar("Tabs2", ImGuiTabBarFlags.AutoSelectNewTabs);
-                if (ImGui.BeginTabItem(T.GetString("Subtable 2.1")))
-                {
-                    ImGui.SliderFloat(T.GetString("Дистанция отрисовки "), ref Program.Config.DrawDistance, 1, 2000, "%.0f");
-                    ImGui.Checkbox(T.GetString("Скелет"), ref Program.Config.DrawBones);
-                    ImGui.Checkbox(T.GetString("Рамка"), ref Program.Config.DrawBoxes);
-                    ImGui.Checkbox(T.GetString("Ник"), ref Program.Config.DrawNick);
-                    ImGui.SliderFloat(T.GetString("Масштаб радара"), ref Program.Config.RadarMashtab, 0f, 10f, "%.1f");
-                    ImGui.Checkbox(T.GetString("Жизни (HP)"), ref Program.Config.DrawHealth);
-                    ImGui.Checkbox(T.GetString("ID Команды"), ref Program.Config.ShowTemmates);
-                    ImGui.Checkbox(T.GetString("Оружие в руках"), ref Program.Config.ShowWeapon);
-                    ImGui.Checkbox(T.GetString("Выходы"), ref Program.Config.DrawExits);
-
-                    ImGui.EndTabItem();
-                }
-
-                if (ImGui.BeginTabItem(T.GetString("Subtable 2.2")))
-                {
-                    ImGui.Checkbox(T.GetString("Антиотдача"), ref Program.Config.NoRecoil);
-                    ImGui.Checkbox(T.GetString("Точка по центру экрана"), ref Program.Config.AimActive);
-                    ImGui.Checkbox(T.GetString("Радар"), ref Program.Config.DrawRadar);
-                    ImGui.SliderFloat(T.GetString("Позиция радара X"), ref Program.Config.RadarOffset.X, 0, -(EFKOverlay.Width - 100), "%1f");
-                    ImGui.SliderFloat(T.GetString("Позиция радара Y"), ref Program.Config.RadarOffset.Y, 0, EFKOverlay.Height - 100, "%1f");
-
-                    ImGui.Checkbox(T.GetString("Режим отладки"), ref Program.Config.ShowDebug);
-                    ImGui.EndTabItem();
-                }
-
-                if (ImGui.BeginTabItem(T.GetString("Subtable 2.3")))
-                {
-                    ImGui.Checkbox(T.GetString("Аимбот"), ref Program.Config.AimBot);
-
-                    if (Program.Config.AimTarget == AimTarget.Custom)
-                        ImGui.DragFloat3(T.GetString("Свое смещение прицела"), ref Program.Config.AimCustomOffset, .1f);
-
-                    ImGui.SliderFloat(T.GetString("Радиус захвата"), ref Program.Config.AimFov, 5f, 500f, "%.1f");
-
-                    ImGui.EndTabItem();
-                }
-            }
-
-            if (btn3_clk)
-            {
-                ImGui.BeginTabBar("Tabs3", ImGuiTabBarFlags.AutoSelectNewTabs);
-                if (ImGui.BeginTabItem(T.GetString("Subtable 3.1")))
-                {
-                    ImGui.SliderFloat(T.GetString("Дистанция отрисовки "), ref Program.Config.DrawDistance, 1, 2000, "%.0f");
-                    ImGui.Checkbox(T.GetString("Скелет"), ref Program.Config.DrawBones);
-                    ImGui.Checkbox(T.GetString("Рамка"), ref Program.Config.DrawBoxes);
-                    ImGui.Checkbox(T.GetString("Ник"), ref Program.Config.DrawNick);
-                    ImGui.SliderFloat(T.GetString("Масштаб радара"), ref Program.Config.RadarMashtab, 0f, 10f, "%.1f");
-                    ImGui.Checkbox(T.GetString("Жизни (HP)"), ref Program.Config.DrawHealth);
-                    ImGui.Checkbox(T.GetString("ID Команды"), ref Program.Config.ShowTemmates);
-                    ImGui.Checkbox(T.GetString("Оружие в руках"), ref Program.Config.ShowWeapon);
-                    ImGui.Checkbox(T.GetString("Выходы"), ref Program.Config.DrawExits);
-
-                    ImGui.EndTabItem();
-                }
-
-                if (ImGui.BeginTabItem(T.GetString("Subtable 3.2")))
-                {
-                    ImGui.Checkbox(T.GetString("Антиотдача"), ref Program.Config.NoRecoil);
-                    ImGui.Checkbox(T.GetString("Точка по центру экрана"), ref Program.Config.AimActive);
-                    ImGui.Checkbox(T.GetString("Радар"), ref Program.Config.DrawRadar);
-                    ImGui.SliderFloat(T.GetString("Позиция радара X"), ref Program.Config.RadarOffset.X, 0, -(EFKOverlay.Width - 100), "%1f");
-                    ImGui.SliderFloat(T.GetString("Позиция радара Y"), ref Program.Config.RadarOffset.Y, 0, EFKOverlay.Height - 100, "%1f");
-
-                    ImGui.Checkbox(T.GetString("Режим отладки"), ref Program.Config.ShowDebug);
-                    ImGui.EndTabItem();
-                }
-
-                if (ImGui.BeginTabItem(T.GetString("Subtable 3.3")))
-                {
-                    ImGui.Checkbox(T.GetString("Аимбот"), ref Program.Config.AimBot);
-
-                    if (Program.Config.AimTarget == AimTarget.Custom)
-                        ImGui.DragFloat3(T.GetString("Свое смещение прицела"), ref Program.Config.AimCustomOffset, .1f);
-
-                    ImGui.SliderFloat(T.GetString("Радиус захвата"), ref Program.Config.AimFov, 5f, 500f, "%.1f");
-
-                    ImGui.EndTabItem();
-                }
-            }
             ImGui.EndChild();
 
             ImGui.End();
