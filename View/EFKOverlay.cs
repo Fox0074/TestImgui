@@ -9,6 +9,7 @@ using UserInterfaceEFK.View;
 
 namespace View
 {
+    internal enum SelectedTable { Table1 = 1, Table2, Table3 }
     internal class EFKOverlay : Overlay
     {
         internal static int Width = 640;
@@ -21,9 +22,7 @@ namespace View
         private bool _showSettings = true;
         private bool _isModuleInit = false;
         private string _bgName = T.RandomString(8);
-        private bool _btn1Clk = true;
-        private bool _btn2Clk = false;
-        private bool _btn3Clk = false;
+        private SelectedTable _selectedTable = SelectedTable.Table1;
         private int _TablesCount = 3;
         private int _splitLineStartXPos = 110;
         private int _splitLineWeight = 30;
@@ -43,32 +42,11 @@ namespace View
             return Task.CompletedTask;
         }
 
-        protected void SwitchButton(int ButtonNum)
+        protected void RenderSubTables()
         {
-            switch (ButtonNum)
-            {
-                case 1:
-                    _btn1Clk = true;
-                    _btn2Clk = false;
-                    _btn3Clk = false;
-                    break;
-                case 2:
-                    _btn1Clk = false;
-                    _btn2Clk = true;
-                    _btn3Clk = false;
-                    break;
-                case 3:
-                    _btn1Clk = false;
-                    _btn2Clk = false;
-                    _btn3Clk = true;
-                    break;
-            }
-        }
-        protected void RenderSubTables(int ButtonNum)
-        {
-            ImGui.BeginTabBar(String.Format("Tabs{0}", ButtonNum), ImGuiTabBarFlags.AutoSelectNewTabs);
+            ImGui.BeginTabBar(String.Format("Tabs{0}", (int)_selectedTable), ImGuiTabBarFlags.AutoSelectNewTabs);
 
-            if (ImGui.BeginTabItem(T.GetString(String.Format("Subtable {0}.1", ButtonNum))))
+            if (ImGui.BeginTabItem(T.GetString(String.Format("Subtable {0}.1", (int)_selectedTable))))
             {
                 ImGui.SliderFloat(T.GetString("Дистанция отрисовки "), ref Program.Config.DrawDistance, 1, 2000, "%.0f");
                 ImGui.Checkbox(T.GetString("Скелет"), ref Program.Config.DrawBones);
@@ -83,7 +61,7 @@ namespace View
                 ImGui.EndTabItem();
             }
 
-            if (ImGui.BeginTabItem(T.GetString(String.Format("Subtable {0}.2", ButtonNum))))
+            if (ImGui.BeginTabItem(T.GetString(String.Format("Subtable {0}.2", (int)_selectedTable))))
             {
                 ImGui.Checkbox(T.GetString("Антиотдача"), ref Program.Config.NoRecoil);
                 ImGui.Checkbox(T.GetString("Точка по центру экрана"), ref Program.Config.AimActive);
@@ -95,7 +73,7 @@ namespace View
                 ImGui.EndTabItem();
             }
 
-            if (ImGui.BeginTabItem(T.GetString(String.Format("Subtable {0}.3", ButtonNum))))
+            if (ImGui.BeginTabItem(T.GetString(String.Format("Subtable {0}.3", (int)_selectedTable))))
             {
                 ImGui.Checkbox(T.GetString("Аимбот"), ref Program.Config.AimBot);
 
@@ -110,7 +88,6 @@ namespace View
 
         protected override void Render()
         {
-
             ImGui.SetWindowSize(new Vector2(Width, Height));
             ImGui.Begin(T.GetString("Slave"),
             ImGuiWindowFlags.NoBringToFrontOnFocus |
@@ -120,23 +97,16 @@ namespace View
             ImGui.BeginChild("Vertical Bar with buttons", new Vector2(_tableButtonWeight, Height * 0.865f), false);
 
             for (int i = 1; i <= _TablesCount; i++)
+            {
                 if (ImGui.Button(String.Format("Table {0}", i), new Vector2(_tableButtonWeight, _tableButtonHeight)))
-                    SwitchButton(i);
-            
+                    _selectedTable = (SelectedTable)i;
+            }
+
             ImGui.EndChild();
 
             ImGui.SameLine(_splitLineStartXPos, _splitLineWeight);
-
             ImGui.BeginChild("Subtables", new Vector2(_subtableFieldWeight, Height * 0.865f), false);
-            if (_btn1Clk)
-                RenderSubTables(1);
-                
-            if (_btn2Clk)
-                RenderSubTables(2);
-
-            if (_btn3Clk)
-                RenderSubTables(3);
-
+            RenderSubTables();
             ImGui.EndChild();
 
             ImGui.End();
